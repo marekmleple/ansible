@@ -29,6 +29,31 @@
     ansible.builtin.package:
       name: "{{ item }}"
       state: present
-    loop:
-      - chrony
-      - iptables
+    loop: "{{ packages }}"
+    tags:
+      - marek1
+      - tomek1
+
+  - name: crond check enabled
+    ansible.builtin.systemd:
+      name: crond
+      enabled: yes
+    tags:
+      - marek2
+
+  - name: sshd config check zmienne
+    ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
+      line: PermitUserEnvironment no
+      create: no
+      regexp: PermitUserEnvironment .*
+    tags:
+      - sshd
+    notify:
+      - restart_ssh
+
+  handlers:
+  - name: restart_ssh
+    ansible.builtin.systemd:
+      name: sshd
+      state: restarted
