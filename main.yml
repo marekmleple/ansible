@@ -15,11 +15,11 @@
       dest: /var/tmp/config
       owner: root
       group: root
-      mode: '0644'
+      mode: '0640'
 
   - name: Add a line to a file if the file does not exist, without passing regexp
     ansible.builtin.lineinfile:
-      path: /var/tmp/config
+      path: /var/tmp/config1
       line: vm.max_map_count=262144
       create: no
 
