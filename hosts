@@ -1,0 +1,12 @@
+[hosty]
+instance-x86-1 ansible_host=130.61.54.9
+instance-arm-3 ansible_host=130.61.154.90
+instance-arm-1 ansible_host=144.24.172.236
+
+[hosty:vars]
+ansible_connection=ssh
+ansible_port=22
+ansible_become=true
+ansible_user=opc
+ansible_ssh_private_key_file=/home/mml/ansible/ssh-key-2022-05-17.key
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'

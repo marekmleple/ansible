@@ -1,0 +1,31 @@
+- name: Intro to Ansible Playbooks
+  hosts: all
+
+  tasks:
+  - name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)
+    ansible.builtin.file:
+      path: /var/tmp/foo.conf
+      state: absent
+      mode: 1777
+      owner: opc
+
+  - name: Copy file with owner and permissions
+    ansible.builtin.copy:
+      src: /etc/sysctl.conf
+      dest: /var/tmp/config
+      owner: root
+      group: root
+      mode: '0644'
+
+  - name: Add a line to a file if the file does not exist, without passing regexp
+    ansible.builtin.lineinfile:
+      path: /var/tmp/config
+      line: vm.max_map_count=262144
+      create: no
+
+  - name: Add a line to a file if the file does not exist, without passing regexp
+    ansible.builtin.lineinfile:
+      path: /var/tmp/config
+      line: vm.max_map_count=262146
+      create: no
+      regexp: vm.max_map_count=.*
