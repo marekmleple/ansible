@@ -6,7 +6,7 @@
     ansible.builtin.file:
       path: /var/tmp/foo.conf
       state: absent
-      mode: 1777
+      mode: 1770
       owner: opc
 
   - name: Copy file with owner and permissions
