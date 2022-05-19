@@ -2,30 +2,33 @@
   hosts: all
 
   tasks:
-  - name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)
-    ansible.builtin.file:
-      path: /var/tmp/foo.conf
-      state: absent
-      mode: 1770
-      owner: opc
+  - name: NODEV checking
+    ansible.posix.mount:
+      src: tmpfs
+      path: /dev/shm
+      fstype: tmpfs
+      opts: defaults,nodev,nosuid,noexec
+      state: present
 
-  - name: Copy file with owner and permissions
-    ansible.builtin.copy:
-      src: /etc/sysctl.conf
-      dest: /var/tmp/config
+  - name: SELINUX correction
+    ansible.builtin.lineinfile:
+      path: /etc/selinux/config
+      line: SELINUX=permissive
+      create: no
+      regexp: SELINUX=.*  
+  
+  - name: Check permissions /etc/issue
+    ansible.builtin.file:
+      path: /etc/issue
+      state: file
+      mode: '0644'
       owner: root
       group: root
-      mode: '0640'
 
-  - name: Add a line to a file if the file does not exist, without passing regexp
-    ansible.builtin.lineinfile:
-      path: /var/tmp/config1
-      line: vm.max_map_count=262144
-      create: no
-
-  - name: Add a line to a file if the file does not exist, without passing regexp
-    ansible.builtin.lineinfile:
-      path: /var/tmp/config
-      line: vm.max_map_count=262146
-      create: no
-      regexp: vm.max_map_count=.*
+  - name: chrony and iptables check installation
+    ansible.builtin.package:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - chrony
+      - iptables
