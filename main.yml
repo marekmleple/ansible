@@ -53,8 +53,8 @@
       - restart_ssh
 
   - name: Message na starcie
-    ansible.builtin.copy:
-      src: files/issue
+    ansible.builtin.template:
+      src: templates/issue.j2
       dest: /etc/issue
       owner: root
       group: root
