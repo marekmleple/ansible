@@ -25,7 +25,7 @@
       owner: root
       group: root
 
-  - name: chrony and iptables check installation
+  - name: Chrony and iptables check installation
     ansible.builtin.package:
       name: "{{ item }}"
       state: present
@@ -34,14 +34,14 @@
       - marek1
       - tomek1
 
-  - name: crond check enabled
+  - name: Crond check enabled
     ansible.builtin.systemd:
       name: crond
       enabled: yes
     tags:
       - marek2
 
-  - name: sshd config check zmienne
+  - name: Sshd config check zmienne
     ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config
       line: PermitUserEnvironment no
@@ -52,8 +52,28 @@
     notify:
       - restart_ssh
 
+  - name: Message na starcie
+    ansible.builtin.copy:
+      src: files/issue
+      dest: /etc/issue
+      owner: root
+      group: root
+      mode: '0644'
+    tags:
+      - mess
+
+  - name: Check permissions /etc/motd
+    ansible.builtin.file:
+      path: /etc/motd
+      state: file
+      mode: '0644'
+      owner: root
+      group: root
+    tags:
+      - motd
+
   handlers:
-  - name: restart_ssh
+  - name: Restart_ssh
     ansible.builtin.systemd:
       name: sshd
       state: restarted
