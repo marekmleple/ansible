@@ -1,0 +1,8 @@
+---
+# tasks file for marek2
+- name: Download Jenkins with check (sha256)
+  get_url:
+    url: "https://get.jenkins.io/war-stable/{{ jen_wersja }}/jenkins.war"
+    dest: /var/tmp/
+    checksum: "sha256:https://get.jenkins.io/war-stable/{{ jen_wersja }}/jenkins.war.sha256"
+  when: ansible_facts["architecture"] == "aarch64"

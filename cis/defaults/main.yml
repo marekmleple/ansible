@@ -1,0 +1,6 @@
+---
+# defaults file for cis
+packages: 
+  - "chrony"
+  - "iptables"
+owner: "Marek"
